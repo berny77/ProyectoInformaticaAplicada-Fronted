@@ -1,18 +1,48 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import './Login.css';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
+  const navigate = useNavigate(); // Inicializa useNavigate
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Lógica de autenticación
+
+    // Creación del cuerpo de la solicitud
+    const loginData = {
+      email: username,
+      password: password
+    };
+
+    try {
+      // Realizamos la solicitud POST al backend
+      const response = await fetch('https://localhost:7001/api/User/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginData)
+      });
+
+      if (response.ok) {
+        // Si la respuesta es exitosa, redirigimos al usuario
+        console.log('Usuario autenticado con éxito');
+        navigate('/inicio'); // Redirige a la página de inicio
+      } else {
+        // Si la respuesta no es 200 OK, mostrar alerta de usuario no encontrado
+        alert('Usuario no encontrado o credenciales incorrectas');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+      alert('Hubo un error al intentar iniciar sesión');
+    }
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // Cambiar el estado de visibilidad
+    setShowPassword(!showPassword); // Cambia el estado de visibilidad
   };
 
   return (
@@ -24,9 +54,9 @@ const Login: React.FC = () => {
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="username" className="form-label">Nombre de usuario</label>
+              <label htmlFor="username" className="form-label">Correo Electrónico</label>
               <input
-                type="text"
+                type="email"
                 className="form-control"
                 id="username"
                 value={username}
@@ -37,7 +67,7 @@ const Login: React.FC = () => {
             <div className="mb-3 position-relative">
               <label htmlFor="password" className="form-label">Contraseña</label>
               <input
-                type={showPassword ? 'text' : 'password'} // Cambiar tipo de entrada según el estado
+                type={showPassword ? 'text' : 'password'} // Cambia el tipo de entrada según el estado
                 className="form-control"
                 id="password"
                 value={password}
@@ -58,6 +88,7 @@ const Login: React.FC = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Login;
