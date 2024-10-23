@@ -1,33 +1,33 @@
 import React from 'react';
-import './Navbar.css'; // Asegúrate de importar el archivo CSS
+import './Navbar.css';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-gradient">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="#">Inicio</a>
-        <button 
-          className="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarNavAltMarkup" 
-          aria-controls="navbarNavAltMarkup" 
-          aria-expanded="false" 
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
+      <div className="container-fluid d-flex justify-content-between align-items-center">
+        <button onClick={() => handleNavigation('/inicio')} className="navbar-brand btn btn-link">
+          Inicio
         </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <a className="nav-link active" aria-current="page" href="#home">Apartado 1</a>
-            <a className="nav-link" href="#about">Apartado 2</a>
-            <a className="nav-link" href="#services">Apartado 3</a>
-          </div>
-          <div className="ms-auto">
-            <button className="btn btn-outline-success" type="button">
-              Login
-            </button>
-          </div>
+        <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+          <button 
+            onClick={() => handleNavigation('/login')} 
+            className="btn btn-outline-success btn-lg me-3" 
+          >
+            <i className="bi bi-box-arrow-in-right"></i> Login
+          </button>
+          <button 
+            onClick={() => handleNavigation('/register')} 
+            className="btn btn-outline-primary btn-lg"
+          >
+            <i className="bi bi-person-plus-fill"></i> Registrarse
+          </button>
         </div>
       </div>
     </nav>

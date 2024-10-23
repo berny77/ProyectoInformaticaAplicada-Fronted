@@ -10,7 +10,7 @@ const File: React.FC = () => {
     base64: string;
   } | null>(null);
 
-  const [owner, setOwner] = useState<string>(''); // nombre propietario definir con el man que se loguea
+  const [owner, setOwner] = useState<string>(''); 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -28,7 +28,7 @@ const File: React.FC = () => {
       reader.onload = () => {
         const base64String = reader.result as string;
         const newFileData = {
-          id: 0, // logica faltante para empezar en 0 e ir incrementando con forme el numero de documentos
+          id: 0, 
           owner: owner || 'berny', // Usar el estado del propietario
           fileType: file.type,
           creationDate: new Date().toISOString(),

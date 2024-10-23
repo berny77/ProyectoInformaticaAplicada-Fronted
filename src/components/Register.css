@@ -1,0 +1,51 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura total de la ventana */
+    background-color: #f8f9fa; /* Fondo gris claro */
+}
+  
+.card {
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para el formulario */
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #ffffff; /* Fondo blanco para los formularios */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    text-align: center; /* Centra el texto dentro de la tarjeta */
+}
+  
+.card-header {
+    background-color: #8ab3cf; /* Azul tradicional */
+    color: #ffffff;
+    text-align: center;
+    border-bottom: none;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+    font-size: 1.5rem; /* Aumenta el tamaño de la fuente en el encabezado */
+}
+  
+.card-body {
+    font-size: 1.1rem; /* Aumenta el tamaño de la fuente en el cuerpo */
+}
+  
+.btn-primary {
+    background-color: #8ab3cf;
+    border: none;
+}
+  
+.btn-primary:hover {
+    background-color: #8ab3cf;
+}
+  
+input.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+  
+.form-label {
+    font-weight: bold;
+    display: block; /* Asegura que la etiqueta se muestre en una nueva línea */
+    margin-bottom: 0.5rem; /* Espacio entre la etiqueta y el campo de entrada */
+}
