@@ -1,0 +1,44 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura total de la ventana */
+    background-color: #f8f9fa; /* Fondo gris claro */
+  }
+  
+  .card {
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para el formulario */
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #ffffff; /* Fondo blanco para los formularios */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  }
+  
+  .card-header {
+    background-color: #8ab3cf; /* Azul tradicional */
+    color: #ffffff;
+    text-align: center;
+    border-bottom: none;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .btn-primary {
+    background-color: #8ab3cf;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #8ab3cf;
+  }
+  
+  input.form-control {
+    border: 1px solid #8ab3cf;
+    border-radius: 5px;
+  }
+  
+  .form-label {
+    font-weight: bold;
+  }
+  

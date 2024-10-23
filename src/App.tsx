@@ -1,16 +1,21 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/NavBar';
-import File from './components/File'; 
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Login from './components/Login';
+import Register from './components/Register';
+import File from './components/File';
 
 const App: React.FC = () => {
   return (
-    <div>
-      <Navbar /> {/* menu */}
-      <File /> {/* Componente File */}
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/inicio" element={<File />} /> {/* Cambié esta línea */}
+        
+      </Routes>
+    </Router>
   );
 };
 

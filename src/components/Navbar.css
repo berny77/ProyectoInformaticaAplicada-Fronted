@@ -1,4 +1,43 @@
+/* Alinear el contenedor de los botones a la derecha */
+.navbar .collapse {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%; /* Asegúrate de que ocupe todo el ancho */
+}
+
+/* Asegúrate de que el logo o el título no interfiera con el alineamiento */
+.navbar-brand {
+  margin-right: auto; /*h*/
+}
+
+/* Añadir un poco de relleno a la barra */
+.navbar {
+  padding: 10px 20px;
+}
+
+/* Degradado para el fondo de la barra de navegación */
 .bg-gradient {
-    background: linear-gradient(to right, #FFD700, #FFAA00); /* Degradado dorado */
+  background: linear-gradient(to right, #4180ab, #e4ebf0); /* Degradado dorado */
+}
+
+/* Estilo para los botones */
+.btn {
+  margin-right: 15px; /* Ajusta el margen según lo que necesites */
+}
+
+/* Cambio de color al pasar el cursor */
+.btn:hover {
+  background-color: #bdd1de; /* Color al pasar el cursor */
+}
+
+/* Iconos ajustados */
+.btn i {
+  margin-right: 5px;
+}
+
+@media (max-width: 992px) {
+  .navbar .collapse {
+    justify-content: center;
+    margin-top: 10px;
   }
-  
+}
