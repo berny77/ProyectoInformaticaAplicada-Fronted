@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+
+const useAuth = () => {
+  return { userId: 1, userName: 'Usuario Ejemplo' }; 
+};
 
 const File: React.FC = () => {
+  const { userId, userName } = useAuth(); 
   const [files, setFiles] = useState<Array<{
     id: number;
     owner: string;
@@ -9,8 +15,12 @@ const File: React.FC = () => {
     size: number;
     base64: string;
   }>>([]);
-  const [owner, setOwner] = useState<string>('');
-  const fileLimit = 6; // Límite de archivos por bloque
+  const [owner, setOwner] = useState<string>(userName || ''); 
+  const fileLimit = 6;
+
+  useEffect(() => {
+    console.log('ID del usuario logueado:', userId);
+  }, [userId]);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
@@ -24,8 +34,6 @@ const File: React.FC = () => {
         base64: string;
       }> = [];
       
-      
-      // Validar el número de archivos seleccionados
       if (files.length + selectedFiles.length > fileLimit) {
         alert(`Solo puedes cargar un máximo de ${fileLimit} archivos.`);
         return;
@@ -33,8 +41,6 @@ const File: React.FC = () => {
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-
-        // Validar el tipo de archivo
         const validTypes = [
           'text/plain',
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -49,24 +55,48 @@ const File: React.FC = () => {
           continue;
         }
 
-        // Leer el archivo como Base64
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onload = async () => {
           const base64String = reader.result as string;
           const newFileData = {
-            id: files.length + newFiles.length, // Asignar ID según la cantidad actual de archivos
-            owner: owner || 'Propietario desconocido', // Usar el estado del propietario
-            fileType: file.type,
+            id: files.length + newFiles.length,
+            owner: owner || 'Propietario desconocido',
+            fileType: file.type.split('/')[1].toUpperCase(), 
             creationDate: new Date().toISOString(),
             size: file.size,
-            base64: base64String.split(',')[1] // Extraer la parte Base64
+            base64: base64String.split(',')[1] 
           };
 
           newFiles.push(newFileData);
-
-          // Actualizar el estado con todos los nuevos archivos
           if (newFiles.length === selectedFiles.length) {
-            setFiles(prevFiles => [...prevFiles, ...newFiles]);
+            const updatedFiles = [...files, ...newFiles];
+            setFiles(updatedFiles);
+
+            const formattedFiles = updatedFiles.map(fileData => ({
+              Owner: fileData.owner,
+              FileType: fileData.fileType,
+              CreationDate: fileData.creationDate,
+              Size: fileData.size,
+              Doc_encode: fileData.base64 
+            }));
+
+            try {
+              const response = await fetch(`https://localhost:7001/api/MemPoolDocument/${userId}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formattedFiles),
+              });
+
+              if (response.ok) {
+                console.log('Documentos guardados exitosamente en la base de datos.');
+              } else {
+                console.error('Error al guardar los documentos:', response.statusText);
+              }
+            } catch (error) {
+              console.error('Error de conexión:', error);
+            }
           }
         };
         reader.readAsDataURL(file);
