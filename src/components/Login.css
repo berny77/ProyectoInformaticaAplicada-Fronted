@@ -1,44 +1,77 @@
 .form-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Altura total de la ventana */
-    background-color: #f8f9fa; /* Fondo gris claro */
-  }
-  
-  .card {
-    width: 100%;
-    max-width: 400px; /* Ancho máximo para el formulario */
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #ffffff; /* Fondo blanco para los formularios */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  }
-  
-  .card-header {
-    background-color: #8ab3cf; /* Azul tradicional */
-    color: #ffffff;
-    text-align: center;
-    border-bottom: none;
-    padding: 10px;
-    border-radius: 8px 8px 0 0;
-  }
-  
-  .btn-primary {
-    background-color: #8ab3cf;
-    border: none;
-  }
-  
-  .btn-primary:hover {
-    background-color: #8ab3cf;
-  }
-  
-  input.form-control {
-    border: 1px solid #8ab3cf;
-    border-radius: 5px;
-  }
-  
-  .form-label {
-    font-weight: bold;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Altura completa de la ventana */
+  background-color: #f8f9fa; /* Fondo gris claro */
+  padding: 20px;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px; /* Ancho máximo del formulario */
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ffffff; /* Fondo blanco */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  text-align: center; /* Centra el contenido dentro de la tarjeta */
+}
+
+.card-header {
+  background-color: #8ab3cf; /* Azul tradicional */
+  color: #ffffff;
+  text-align: center;
+  border-bottom: none;
+  padding: 15px;
+  border-radius: 8px 8px 0 0;
+  font-size: 1.5rem; /* Aumenta el tamaño de la fuente */
+}
+
+.card-body {
+  font-size: 1rem;
+  text-align: center; /* Alinea el contenido al centro */
+}
+
+.form-control {
+  display: block; /* Hace que el campo ocupe una nueva línea */
+  width: 100%; /* El campo ocupa todo el ancho disponible */
+  max-width: 350px; /* Ancho máximo para el campo */
+  margin: 0 auto 15px auto; /* Centra el campo y añade espacio inferior */
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #8ab3cf; /* Borde azul */
+  border-radius: 5px;
+}
+
+.form-label {
+  font-weight: bold;
+  margin-bottom: 0.5rem; /* Espacio entre la etiqueta y el campo */
+  text-align: left;
+  display: block; /* Mantiene la etiqueta en una nueva línea */
+  max-width: 350px;
+  margin: 0 auto; /* Centra la etiqueta */
+}
+
+.btn-primary {
+  background-color: #8ab3cf;
+  border: none;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 350px; /* Asegura que el botón esté centrado */
+  margin: 0 auto;
+}
+
+.btn-primary:hover {
+  background-color: #709aad; /* Un tono más oscuro al hacer hover */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 5px; /* Ajustar para que esté alineado al borde del input */
+  top: 38px; /* Ajustar según la altura del input */
+  cursor: pointer;
+  color: #8ab3cf; /* Color del ícono */
+}
+
