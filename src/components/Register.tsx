@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import './Register.css';
 
 const Register: React.FC = () => {
-  const [nombreApellido, setNombreApellido] = useState('');
-  const [numeroTelefono, setNumeroTelefono] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Para mostrar/ocultar contraseña
+  const [showPassword, setShowPassword] = useState(false);
   const [errorFechaNacimiento, setErrorFechaNacimiento] = useState('');
-  const [errorNombreApellido, setErrorNombreApellido] = useState('');
+  const [errorNombre, setErrorNombre] = useState('');
+  const [errorApellido, setErrorApellido] = useState('');
   const [errorNombreUsuario, setErrorNombreUsuario] = useState('');
-  const [errorNumeroTelefono, setErrorNumeroTelefono] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const navigate = useNavigate(); // Crear la función de navegación
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar que el usuario tenga más de 18 años
     const birthDate = new Date(fechaNacimiento);
     const today = new Date();
     const age = today.getFullYear() - birthDate.getFullYear();
@@ -25,15 +27,21 @@ const Register: React.FC = () => {
 
     if (age < 18 || (age === 18 && monthDifference < 0)) {
       setErrorFechaNacimiento('Debes tener al menos 18 años para registrarte.');
-      return; // Detiene el envío si no cumple la condición
+      return;
     }
 
-    // Validar campos de nombre, usuario y número de teléfono
-    if (nombreApellido.trim() === '') {
-      setErrorNombreApellido('El nombre completo es requerido.');
+    if (nombre.trim() === '') {
+      setErrorNombre('El nombre es requerido.');
       return;
     } else {
-      setErrorNombreApellido('');
+      setErrorNombre('');
+    }
+
+    if (apellido.trim() === '') {
+      setErrorApellido('El apellido es requerido.');
+      return;
+    } else {
+      setErrorApellido('');
     }
 
     if (nombreUsuario.trim() === '') {
@@ -43,28 +51,54 @@ const Register: React.FC = () => {
       setErrorNombreUsuario('');
     }
 
-    if (numeroTelefono.trim() === '' || isNaN(Number(numeroTelefono))) {
-      setErrorNumeroTelefono('El número de teléfono es requerido y debe ser numérico.');
-      return;
-    } else {
-      setErrorNumeroTelefono('');
-    }
-
-    // Si todas las validaciones son válidas, resetea el error de fecha
     setErrorFechaNacimiento('');
 
-    // Lógica de registro aquí
-    console.log('Registro exitoso');
+    // Aquí creamos el objeto que enviaremos al backend
+    const userData = {
+      userN: nombreUsuario,
+      name: nombre,
+      lastName: apellido,
+      email: email,
+      dateOfBirth: new Date(fechaNacimiento).toISOString(),
+      password: password
+    };
+
+    try {
+      const response = await fetch('https://localhost:7001/api/User', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+
+      if (response.ok) {
+        console.log('Registro exitoso');
+        // Redirigir al usuario al login
+        navigate('/login');
+      } else {
+        console.error('Error al registrar el usuario');
+      }
+    } catch (error) {
+      console.error('Error de red al intentar registrar el usuario:', error);
+    }
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleNombreApellidoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNombreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (/^[A-Za-z\s]*$/.test(value)) { // Acepta solo letras y espacios
-      setNombreApellido(value);
+      setNombre(value);
+    }
+  };
+
+  const handleApellidoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^[A-Za-z\s]*$/.test(value)) { // Acepta solo letras y espacios
+      setApellido(value);
     }
   };
 
@@ -72,13 +106,6 @@ const Register: React.FC = () => {
     const value = e.target.value;
     if (/^[A-Za-z]*$/.test(value)) { // Acepta solo letras
       setNombreUsuario(value);
-    }
-  };
-
-  const handleNumeroTelefonoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (/^\d*$/.test(value)) { // Acepta solo números
-      setNumeroTelefono(value);
     }
   };
 
@@ -91,28 +118,28 @@ const Register: React.FC = () => {
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="nombreApellido" className="form-label">Nombre Completo</label>
+              <label htmlFor="nombre" className="form-label">Nombre</label>
               <input
                 type="text"
                 className="form-control"
-                id="nombreApellido"
-                value={nombreApellido}
-                onChange={handleNombreApellidoChange}
+                id="nombre"
+                value={nombre}
+                onChange={handleNombreChange}
                 required
               />
-              {errorNombreApellido && <small className="text-danger">{errorNombreApellido}</small>}
+              {errorNombre && <small className="text-danger">{errorNombre}</small>}
             </div>
             <div className="mb-3">
-              <label htmlFor="numeroTelefono" className="form-label">Número de Teléfono</label>
+              <label htmlFor="apellido" className="form-label">Apellido</label>
               <input
                 type="text"
                 className="form-control"
-                id="numeroTelefono"
-                value={numeroTelefono}
-                onChange={handleNumeroTelefonoChange}
+                id="apellido"
+                value={apellido}
+                onChange={handleApellidoChange}
                 required
               />
-              {errorNumeroTelefono && <small className="text-danger">{errorNumeroTelefono}</small>}
+              {errorApellido && <small className="text-danger">{errorApellido}</small>}
             </div>
             <div className="mb-3">
               <label htmlFor="nombreUsuario" className="form-label">Nombre de Usuario</label>
@@ -159,8 +186,8 @@ const Register: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <span 
-                className="eye-icon" 
+              <span
+                className="eye-icon"
                 onClick={togglePasswordVisibility}
                 style={{ cursor: 'pointer' }}
               >
