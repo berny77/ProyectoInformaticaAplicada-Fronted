@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate
-import './Register.css';
+import '../styles/Register.css';
 
 const Register: React.FC = () => {
   const [nombre, setNombre] = useState('');
@@ -74,7 +74,6 @@ const Register: React.FC = () => {
 
       if (response.ok) {
         console.log('Registro exitoso');
-        // Redirigir al usuario al login
         navigate('/login');
       } else {
         console.error('Error al registrar el usuario');
@@ -90,21 +89,21 @@ const Register: React.FC = () => {
 
   const handleNombreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^[A-Za-z\s]*$/.test(value)) { // Acepta solo letras y espacios
+    if (/^[A-Za-z\s]*$/.test(value)) {
       setNombre(value);
     }
   };
 
   const handleApellidoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^[A-Za-z\s]*$/.test(value)) { // Acepta solo letras y espacios
+    if (/^[A-Za-z\s]*$/.test(value)) {
       setApellido(value);
     }
   };
 
   const handleNombreUsuarioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^[A-Za-z]*$/.test(value)) { // Acepta solo letras
+    if (/^[A-Za-z]*$/.test(value)) {
       setNombreUsuario(value);
     }
   };
@@ -194,7 +193,7 @@ const Register: React.FC = () => {
                 {showPassword ? <i className="fas fa-eye-slash"></i> : <i className="fas fa-eye"></i>}
               </span>
             </div>
-            <button type="submit" className="btn btn-primary w-100">Registrarse</button>
+            <button type="submit" className="btn-primary w-100">Registrarse</button>
           </form>
         </div>
       </div>

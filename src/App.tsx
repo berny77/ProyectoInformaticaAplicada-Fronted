@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/NavBar';
 import Login from './components/Login';
 import Register from './components/Register';
-import FileGrid from './components/FileGrid'; // Cambiado a FileGrid
+import FileGrid from './components/File/FileGrid'; // Cambiado a FileGrid
 
 const App: React.FC = () => {
   return (

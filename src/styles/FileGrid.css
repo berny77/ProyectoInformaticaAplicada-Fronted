@@ -1,29 +1,58 @@
 .file-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr); 
-  gap: 20px;                            
-  max-width: 900px;                      
-  margin: 0 auto;                       
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;                            
+  justify-content: center;
+  padding: 0 10px;                      
 }
 
 .file-item {
-  display: flex;
-  flex-direction: column;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  overflow: hidden;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   background-color: #f9f9f9;
-  border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 200px;     
-  height: 250px;   
-  overflow: hidden;  
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.file-item:hover{
+  transform: scale(1);
 }
 
-.file-item img {
+img {
   max-width: 100%;
   max-height: 120px;  
   margin-bottom: 10px;
-  object-fit: cover;  
+  object-fit: fill;  
+}
+
+input{
+  font-family: inherit;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+.file-grid .file-item p{
+  font-family: inherit;
+}
+
+/* dropzone  */
+
+.drop-zone {
+  border: 2px dashed #4180ab ;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  margin: 10px 10px;
+}
+.drop-zone p{
+  margin: 0;
+
 }
