@@ -2,54 +2,55 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Altura completa de la ventana */
-  background-color: #f8f9fa; /* Fondo gris claro */
+  height: 76vh;
+  background-color: #f8f9fa;
   padding: 20px;
 }
 
 .card {
   width: 100%;
-  max-width: 400px; /* Ancho máximo del formulario */
+  max-width: 400px;
   padding: 20px;
   border-radius: 10px;
-  background-color: #ffffff; /* Fondo blanco */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-  text-align: center; /* Centra el contenido dentro de la tarjeta */
+  background-color: #ffffff; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+  text-align: center;
 }
 
 .card-header {
-  background-color: #8ab3cf; /* Azul tradicional */
+  background-color: #8ab3cf;
   color: #ffffff;
   text-align: center;
   border-bottom: none;
   padding: 15px;
   border-radius: 8px 8px 0 0;
-  font-size: 1.5rem; /* Aumenta el tamaño de la fuente */
+  font-size: 1.5rem;
 }
 
 .card-body {
   font-size: 1rem;
-  text-align: center; /* Alinea el contenido al centro */
+  text-align: center;
 }
 
 .form-control {
-  display: block; /* Hace que el campo ocupe una nueva línea */
-  width: 100%; /* El campo ocupa todo el ancho disponible */
-  max-width: 350px; /* Ancho máximo para el campo */
-  margin: 0 auto 15px auto; /* Centra el campo y añade espacio inferior */
+  display: block;
+  width: 100%; 
+  max-width: 350px;
+  margin: 0 auto 15px auto;
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #8ab3cf; /* Borde azul */
+  border: 1px solid #8ab3cf;
   border-radius: 5px;
+  max-height: 24px;
 }
 
 .form-label {
   font-weight: bold;
-  margin-bottom: 0.5rem; /* Espacio entre la etiqueta y el campo */
+  margin-bottom: 0.5rem;
   text-align: left;
-  display: block; /* Mantiene la etiqueta en una nueva línea */
+  display: block;
   max-width: 350px;
-  margin: 0 auto; /* Centra la etiqueta */
+  margin: 0 auto;
 }
 
 .btn-primary {
@@ -59,19 +60,20 @@
   font-size: 1rem;
   border-radius: 5px;
   width: 100%;
-  max-width: 350px; /* Asegura que el botón esté centrado */
+  max-width: 370px; 
+  text-align: center;
   margin: 0 auto;
 }
 
 .btn-primary:hover {
-  background-color: #709aad; /* Un tono más oscuro al hacer hover */
+  background-color: #709aad;
 }
 
 .toggle-password {
   position: absolute;
-  right: 5px; /* Ajustar para que esté alineado al borde del input */
-  top: 38px; /* Ajustar según la altura del input */
+  right: 5px;
+  top: 38px;
   cursor: pointer;
-  color: #8ab3cf; /* Color del ícono */
+  color: #8ab3cf;
 }
 

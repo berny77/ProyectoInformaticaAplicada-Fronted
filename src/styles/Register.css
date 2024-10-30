@@ -36,6 +36,7 @@
     display: block; /* Asegura que el campo sea un bloque */
     width: 100%; /* El campo ocupa todo el ancho disponible */
     max-width: 350px; /* Ancho máximo para el campo */
+    max-height: 24px;
     margin: 0 auto 15px auto; /* Centra el campo y agrega espaciado abajo */
     padding: 10px;
     font-size: 1rem;
@@ -59,8 +60,9 @@
     font-size: 1rem;
     border-radius: 5px;
     width: 100%;
-    max-width: 350px; /* Asegura que el botón esté centrado */
+    max-width: 350px;
     margin: 0 auto;
+    text-align: center;
 }
 
 .btn-primary:hover {

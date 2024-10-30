@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import './Login.css';
+import { useNavigate } from 'react-router-dom';
+import '../styles/Login.css';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
-  const navigate = useNavigate(); // Inicializa useNavigate
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Creación del cuerpo de la solicitud
     const loginData = {
       email: username,
       password: password
     };
 
     try {
-      // Realizamos la solicitud POST al backend
       const response = await fetch('https://localhost:7001/api/User/login', {
         method: 'POST',
         headers: {
@@ -28,7 +26,6 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        // Si la respuesta es exitosa, redirigimos al usuario
         console.log('Usuario autenticado con éxito');
         navigate('/inicio'); // Redirige a la página de inicio
       } else {
@@ -42,7 +39,7 @@ const Login: React.FC = () => {
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // Cambia el estado de visibilidad
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -67,7 +64,7 @@ const Login: React.FC = () => {
             <div className="mb-3 position-relative">
               <label htmlFor="password" className="form-label">Contraseña</label>
               <input
-                type={showPassword ? 'text' : 'password'} // Cambia el tipo de entrada según el estado
+                type={showPassword ? 'text' : 'password'}
                 className="form-control"
                 id="password"
                 value={password}
@@ -77,12 +74,12 @@ const Login: React.FC = () => {
               <span 
                 className="toggle-password" 
                 onClick={togglePasswordVisibility} 
-                style={{ cursor: 'pointer', position: 'absolute', right: '20px', top: '30px' }} // Ajustar posición si es necesario
+                style={{ cursor: 'pointer', position: 'absolute', right: '25px', top: '34px' }} 
               >
                 {showPassword ? <i className="fas fa-eye-slash"></i> : <i className="fas fa-eye"></i>}
               </span>
             </div>
-            <button type="submit" className="btn btn-primary w-100">Iniciar Sesión</button>
+            <button type="submit" className="btn-primary w-100">Iniciar Sesión</button>
           </form>
         </div>
       </div>
