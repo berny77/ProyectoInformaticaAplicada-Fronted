@@ -3,8 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import Document from '../../model/Document';
 import { getFileType } from './fileGridFns';
 import { getFileLogo } from './FileLogo';
-import upload from '../../assets/icons/upload.png'
-import '../../styles/FileGrid.css';
+import '../../styles/FileGrid.scss';
 
 export const getFilePreview = (fileType: string, base64: string) => {
   if (fileType.includes('image')) {
