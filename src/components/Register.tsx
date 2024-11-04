@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate
-import '../styles/Register.css';
+import '../styles/Register.scss';
+import '../styles/global.scss';
 
 const Register: React.FC = () => {
   const [nombre, setNombre] = useState('');
@@ -110,17 +111,16 @@ const Register: React.FC = () => {
 
   return (
     <div className="form-container">
-      <div className="card">
-        <div className="card-header">
+      <div className="cs-card">
+        <div className="cs-card-header">
           <h3>Registrarse</h3>
         </div>
-        <div className="card-body">
+        <div className="cs-card-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="nombre" className="form-label">Nombre</label>
               <input
                 type="text"
-                className="form-control"
                 id="nombre"
                 value={nombre}
                 onChange={handleNombreChange}
@@ -132,7 +132,6 @@ const Register: React.FC = () => {
               <label htmlFor="apellido" className="form-label">Apellido</label>
               <input
                 type="text"
-                className="form-control"
                 id="apellido"
                 value={apellido}
                 onChange={handleApellidoChange}
@@ -144,7 +143,6 @@ const Register: React.FC = () => {
               <label htmlFor="nombreUsuario" className="form-label">Nombre de Usuario</label>
               <input
                 type="text"
-                className="form-control"
                 id="nombreUsuario"
                 value={nombreUsuario}
                 onChange={handleNombreUsuarioChange}
@@ -156,7 +154,6 @@ const Register: React.FC = () => {
               <label htmlFor="fechaNacimiento" className="form-label">Fecha de Nacimiento</label>
               <input
                 type="date"
-                className="form-control"
                 id="fechaNacimiento"
                 value={fechaNacimiento}
                 onChange={(e) => setFechaNacimiento(e.target.value)}
@@ -164,11 +161,10 @@ const Register: React.FC = () => {
               />
               {errorFechaNacimiento && <small className="text-danger">{errorFechaNacimiento}</small>}
             </div>
-            <div className="mb-3 position-relative">
+            <div className="mb-3">
               <label htmlFor="email" className="form-label">Correo Electrónico</label>
               <input
                 type="email"
-                className="form-control"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -179,7 +175,6 @@ const Register: React.FC = () => {
               <label htmlFor="password" className="form-label">Contraseña</label>
               <input
                 type={showPassword ? "text" : "password"} // Cambia entre texto y contraseña
-                className="form-control"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

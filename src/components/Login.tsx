@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Login.css';
+import '../styles/global.scss';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -26,14 +26,18 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        console.log('Usuario autenticado con éxito');
-        navigate('/inicio'); // Redirige a la página de inicio
+        const data = await response.json();
+        const sessionData = {
+          userId: data.user.id, 
+          userName: data.user.name, 
+          lastName: data.user.lastName, 
+          token: data.token};
+        sessionStorage.setItem('sessionData', JSON.stringify(sessionData));
+        navigate('/inicio'); 
       } else {
-        // Si la respuesta no es 200 OK, mostrar alerta de usuario no encontrado
         alert('Usuario no encontrado o credenciales incorrectas');
       }
     } catch (error) {
-      console.error('Error de red:', error);
       alert('Hubo un error al intentar iniciar sesión');
     }
   };
@@ -44,11 +48,11 @@ const Login: React.FC = () => {
 
   return (
     <div className="form-container">
-      <div className="card">
-        <div className="card-header">
+      <div className="cs-card ">
+        <div className="cs-card-header">
           <h3>Iniciar Sesión</h3>
         </div>
-        <div className="card-body">
+        <div className="cs-card-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="username" className="form-label">Correo Electrónico</label>
@@ -72,9 +76,8 @@ const Login: React.FC = () => {
                 required
               />
               <span 
-                className="toggle-password" 
+                className="eye-icon" 
                 onClick={togglePasswordVisibility} 
-                style={{ cursor: 'pointer', position: 'absolute', right: '25px', top: '34px' }} 
               >
                 {showPassword ? <i className="fas fa-eye-slash"></i> : <i className="fas fa-eye"></i>}
               </span>
