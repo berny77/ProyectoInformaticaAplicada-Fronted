@@ -59,7 +59,8 @@ p {
 a {
     text-decoration: none !important;
 }
-p a:hover{
+
+p a:hover {
     cursor: pointer;
 }
 
@@ -163,9 +164,9 @@ p a:hover{
     }
 }
 
-
 .ftco-navbar-light {
-    background: #fff !important;
+    background: rgb(189, 209, 222);
+    background: linear-gradient(307deg, rgba(189, 209, 222, 1) 28%, rgba(66, 124, 163, 1) 91%);
     z-index: 3;
     padding: 10px 10px;
     border-radius: 5px;
@@ -219,7 +220,7 @@ p a:hover{
 }
 
 .ftco-navbar-light .navbar-nav>.nav-item>.nav-link:hover {
-    color: #8ab3cf;
+    color: #115583;
 }
 
 @media (max-width: 991.98px) {
@@ -237,7 +238,7 @@ p a:hover{
 }
 
 .ftco-navbar-light .navbar-nav>.nav-item.active>a {
-    color: #8ab3cf;
+    color: #44348b;
 }
 
 @media (max-width: 991.98px) {
