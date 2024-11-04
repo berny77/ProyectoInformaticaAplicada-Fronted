@@ -1,27 +1,26 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Document from '../../model/Document';
-import { getFileLogo, getFileType } from './fileGridFns';
+import { getFileType } from './fileGridFns';
+import { getFileLogo } from './FileLogo';
+import upload from '../../assets/icons/upload.png'
 import '../../styles/FileGrid.css';
-
-const useAuth = () => {
-  return { userId: 1, userName: 'Usuario Ejemplo' };
-};
 
 export const getFilePreview = (fileType: string, base64: string) => {
   if (fileType.includes('image')) {
     return <img src={`data:${fileType};base64,${base64}`} alt="preview" style={{ width: '100%', height: '150px', objectFit: 'cover' }} />;
   } else {
-    return <img src={getFileLogo(fileType)} alt="preview" />;
+    return getFileLogo(fileType);
   }
 };
 
-const save = async (files: Document[], userId: number) => {
+const save = async (userId: number, files: Document[], token: string) => {
   try {
-    const response = await fetch(`https://localhost:7001/api/MemPoolDocument/${userId}`, {
+    await fetch(`https://localhost:7001/api/MemPoolDocument/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(files),
     });
@@ -30,15 +29,40 @@ const save = async (files: Document[], userId: number) => {
   }
 };
 
+const getUserFiles = async (userId: number, token: string) => {
+  try {
+    const response = await fetch(`https://localhost:7001/api/MemPoolDocument/${userId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+
+    if (response.ok) return await response.json();
+    return;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
 const File: React.FC = () => {
-  const { userId, userName } = useAuth();
+  const [sessionData, setSessionData] = useState(JSON.parse(sessionStorage.getItem('sessionData')!));
   const [files, setFiles] = useState<Array<Document>>([]);
-  const [owner, setOwner] = useState<string>(userName || '');
   const fileLimit = 6;
 
+  const setUserFiles = async () => {
+    if (sessionData) {
+      const dataResponse = await getUserFiles(Number.parseInt(sessionData.userId), sessionData.token);
+      if (dataResponse) {
+        const { data } = dataResponse;
+        setFiles(data);
+      }
+    }
+  };
+
   useEffect(() => {
-    console.log('ID del usuario logueado:', userId);
-  }, [userId]);
+    setUserFiles();
+  }, []);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles: Array<Document> = [];
@@ -50,12 +74,12 @@ const File: React.FC = () => {
     acceptedFiles.forEach(file => {
       if (getFileType(file.type.split('/')[1]) !== 'Tipo desconocido') {
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onload = async () => {
           const base64String = reader.result as string;
 
           const newFileData: Document = {
             id: files.length + newFiles.length,
-            owner: owner || 'Propietario desconocido',
+            owner: sessionData.userName,
             fileType: file.type.split('/')[1],
             creationDate: new Date().toISOString(),
             size: file.size.toString(),
@@ -64,19 +88,30 @@ const File: React.FC = () => {
 
           newFiles.push(newFileData);
           if (newFiles.length === acceptedFiles.length) {
-            setFiles(prevFiles => [...prevFiles, ...newFiles]);
-            save([...files, ...newFiles], userId);
+            await save(sessionData.userId, newFiles, sessionData.token);
+            await setUserFiles();
           }
         };
         reader.readAsDataURL(file);
       }
     });
-
-  }, [files, owner, userId]);
+    setFiles(prevFiles => [...prevFiles, ...newFiles]);
+  }, [files, sessionData.userName, sessionData.userId, sessionData.token]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    multiple: true
+    accept: 
+     {
+      'text/plain': ['.txt'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx', '.xls'],
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      'application/pdf': ['.pdf'],
+      'image/jpeg': ['.jpeg', '.jpg'],
+      'image/png': ['.png']
+     },
+    multiple: true,
+    maxFiles: 6
   });
 
   return (
@@ -84,13 +119,14 @@ const File: React.FC = () => {
       <div
         {...getRootProps()}
         className='drop-zone'
-        style={{backgroundColor: isDragActive ? '#f0f8ff' : '#fafafa'}}
+        style={{ backgroundColor: isDragActive ? '#f0f8ff' : '#fafafa' }}
       >
         <input {...getInputProps()} />
-        <img width="32" height="32" src="https://img.icons8.com/external-dreamstale-lineal-dreamstale/32/external-download-ui-dreamstale-lineal-dreamstale.png" alt="external-download-ui-dreamstale-lineal-dreamstale"/>                {isDragActive ? (
+        <img className='upload' src="https://img.icons8.com/pastel-glyph/100/upload-document--v2.png" alt="upload-document--v2"/>
+        {isDragActive ? (
           <p>Suelta los archivos aquí...</p>
         ) : (
-          <p>Arrastra y suelta los archivos aquí o haz clic para seleccionar</p>
+          <p style={{fontWeight: 'bold', fontFamily: 'monospace'}}>Arrastra y suelta los archivos aquí o haz clic para seleccionar</p>
         )}
       </div>
 
@@ -105,7 +141,7 @@ const File: React.FC = () => {
                 <p><strong>Propietario:</strong> {fileData.owner}</p>
                 <p><strong>Tipo de archivo:</strong> {getFileType(fileData.fileType)}</p>
                 <p><strong>Fecha de creación:</strong> {new Date(fileData.creationDate).toLocaleString()}</p>
-                <p><strong>Tamaño:</strong> {fileData.size} bytes</p>
+                <p><strong>Tamaño:</strong> {Math.trunc((Number.parseInt(fileData.size)/1024))} kb</p>
               </div>
             </div>
           ))}
