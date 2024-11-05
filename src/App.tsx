@@ -5,16 +5,19 @@ import Navbar1 from './components/Navbar';
 import Login from './components/Login';
 import Register from './components/Register';
 import FileGrid from './components/File/FileGrid'; // Cambiado a FileGrid
+import './App.css'
 
 const App: React.FC = () => {
   return (
     <Router>
-      <Navbar1/>
+     <div className='container cs-height'>
+     <Navbar1/>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/inicio" element={<FileGrid />} /> {/* Cambiado a FileGrid */}
       </Routes>
+     </div>
     </Router>
   );
 };

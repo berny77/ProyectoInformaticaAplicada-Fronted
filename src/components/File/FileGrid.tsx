@@ -47,14 +47,17 @@ const getUserFiles = async (userId: number, token: string) => {
 const File: React.FC = () => {
   const [sessionData, setSessionData] = useState(JSON.parse(sessionStorage.getItem('sessionData')!));
   const [files, setFiles] = useState<Array<Document>>([]);
+  const [loading, setLoading] = useState(false);
   const fileLimit = 6;
 
   const setUserFiles = async () => {
+    setLoading(true);
     if (sessionData) {
       const dataResponse = await getUserFiles(Number.parseInt(sessionData.userId), sessionData.token);
       if (dataResponse) {
         const { data } = dataResponse;
         setFiles(data);
+        setLoading(false);
       }
     }
   };
@@ -99,8 +102,8 @@ const File: React.FC = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: 
-     {
+    accept:
+    {
       'text/plain': ['.txt'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx', '.xls'],
@@ -108,24 +111,24 @@ const File: React.FC = () => {
       'application/pdf': ['.pdf'],
       'image/jpeg': ['.jpeg', '.jpg'],
       'image/png': ['.png']
-     },
+    },
     multiple: true,
     maxFiles: 6
   });
 
   return (
-    <div>
+    <div className='col-12'>
       <div
         {...getRootProps()}
         className='drop-zone'
         style={{ backgroundColor: isDragActive ? '#f0f8ff' : '#fafafa' }}
       >
         <input {...getInputProps()} />
-        <img className='upload' src="https://img.icons8.com/pastel-glyph/100/upload-document--v2.png" alt="upload-document--v2"/>
+          <div className='d-flex justify-content-center'><a className="d-flex align-items-center justify-content-center"><span className="fa fa-file-arrow-up"></span></a></div>
         {isDragActive ? (
           <p>Suelta los archivos aquí...</p>
         ) : (
-          <p style={{fontWeight: 'bold', fontFamily: 'monospace'}}>Arrastra y suelta los archivos aquí o haz clic para seleccionar</p>
+          <p>Arrastra y suelta los archivos aquí o haz clic para seleccionar</p>
         )}
       </div>
 
@@ -140,12 +143,19 @@ const File: React.FC = () => {
                 <p><strong>Propietario:</strong> {fileData.owner}</p>
                 <p><strong>Tipo de archivo:</strong> {getFileType(fileData.fileType)}</p>
                 <p><strong>Fecha de creación:</strong> {new Date(fileData.creationDate).toLocaleString()}</p>
-                <p><strong>Tamaño:</strong> {Math.trunc((Number.parseInt(fileData.size)/1024))} kb</p>
+                <p><strong>Tamaño:</strong> {Math.trunc((Number.parseInt(fileData.size) / 1024))} kb</p>
               </div>
             </div>
           ))}
         </div>
       )}
+      <div className='d-flex justify-content-center loading-div'>
+        {loading && (
+          <div className="spinner-grow spinner-grow-sm text-secondary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -28,13 +28,14 @@
   }
 }
 
+
 .drop-zone {
-  border: 2px dashed #4180ab;
+  border: 1px dashed #4180ab;
   border-radius: 5px;
   padding: 10px;
   text-align: center;
   cursor: pointer;
-  margin: 10px 10px;
+  margin: 10px 5px;
   box-shadow: 0 10px 8px #dceaf3;
   background-color: #fafafa;
 
@@ -44,11 +45,10 @@
 
   p {
     margin: 0;
-    font-weight: bold;
     font-family: monospace;
   }
 
-  img.upload {
+  .upload {
     max-width: 58px !important;
     max-height: 100px !important;
   }
@@ -62,10 +62,24 @@ img {
 }
 
 input {
-  font-family: inherit;
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 40px;
   display: flex;
   align-items: center;
+}
+
+.loading-div{
+  padding: 150px 0;
+}
+
+.drop-zone a{
+  border: 1px solid #b6bad7;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  span{
+    color: #b6bad7;
+  }
 }
