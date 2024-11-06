@@ -362,6 +362,7 @@ const File: React.FC = () => {
         )}
       </div>
   
+  
       {files.length > 0 && (
         <table className="file-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
