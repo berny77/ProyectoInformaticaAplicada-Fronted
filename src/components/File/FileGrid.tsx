@@ -155,20 +155,73 @@ const File: React.FC = () => {
 
   const handleDownloadSelected = async () => {
     const zip = new JSZip();
+    const selectedFileIds = Array.from(selectedFiles);
   
-    selectedFiles.forEach((fileId) => {
-      const fileData = files.find(file => file.id === fileId);
-      if (fileData) {
-        const content = fileData.doc_encode ? atob(fileData.doc_encode) : '';
-        
-        const fileName = fileData.name || fileData.fileType;
-        zip.file(fileName, content, { binary: true });
+    // Iteramos sobre los archivos seleccionados y los agregamos al archivo zip
+    for (let i = 0; i < selectedFileIds.length; i++) {
+      const fileId = selectedFileIds[i];
+      try {
+        const response = await fetch(`https://localhost:7001/api/MemPoolDocument/${sessionData.userId}/${fileId}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${sessionData.token}`,
+          },
+        });
+  
+        if (response.ok) {
+          const fileData = await response.json();
+          if (fileData && fileData.doc_encode) {
+            const content = atob(fileData.doc_encode);
+            const byteArray = new Uint8Array(content.length);
+            for (let i = 0; i < content.length; i++) {
+              byteArray[i] = content.charCodeAt(i);
+            }
+  
+            // Obtener el tipo de archivo y asignar una extensión
+            const fileType = getFileType(fileData.fileType);
+            let fileExtension = '';
+            switch (fileType) {
+              case 'Documento de Texto':
+                fileExtension = 'txt';
+                break;
+              case 'Documento Word':
+                fileExtension = 'docx';
+                break;
+              case 'Excel':
+                fileExtension = 'xlsx';
+                break;
+              case 'PowerPoint':
+                fileExtension = 'pptx';
+                break;
+              case 'Documento PDF':
+                fileExtension = 'pdf';
+                break;
+              case 'Imagen JPEG':
+                fileExtension = 'jpeg';
+                break;
+              case 'Imagen PNG':
+                fileExtension = 'png';
+                break;
+              default:
+                fileExtension = 'file';
+                break;
+            }
+  
+            // Agregar el archivo al archivo zip con la extensión correcta
+            zip.file(`${fileData.fileName || `archivo_${fileData.id}`}.${fileExtension}`, byteArray);
+          }
+        }
+      } catch (error) {
+        console.error('Error al descargar archivo seleccionado:', error);
       }
-    });
+    }
   
-    const zipBlob = await zip.generateAsync({ type: 'blob' });
-    saveAs(zipBlob, 'selected_files.zip');
+    // Generar el archivo zip y ofrecerlo para descarga
+    zip.generateAsync({ type: 'blob' }).then((content) => {
+      saveAs(content, 'archivos_comprimidos.zip');
+    });
   };
+  
 
   const handleDownload = async (fileId: number) => {
     try {
