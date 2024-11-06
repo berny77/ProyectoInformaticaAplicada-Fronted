@@ -369,8 +369,8 @@ const File: React.FC = () => {
               <th colSpan={9} style={{ textAlign: 'right' }}>
                 {selectedFiles.size > 1 && (
                   <>
-                    <button onClick={handleDownloadSelected}>Descargar todo</button>
-                    <button onClick={handleDeleteSelected} disabled={selectedFiles.size < 1}>
+                    <button className="download-button" onClick={handleDownloadSelected}>Descargar todo</button>
+                    <button className="delete-button" onClick={handleDeleteSelected} disabled={selectedFiles.size < 1}>
                       Eliminar Todo
                     </button>
                   </>
@@ -404,10 +404,10 @@ const File: React.FC = () => {
                 <td>{new Date(file.creationDate).toLocaleString()}</td>
                 <td>{formatFileSize(Number(file.size))}</td>
                 <td>
-                  <button onClick={() => handleDownload(file.id)}>Descargar</button>
+                <button className="download-button" onClick={() => handleDownload(file.id)}> Descargar </button>
                 </td>
                 <td>
-                  <button onClick={() => handleDelete(file.id)}>Eliminar</button>
+                  <button className="delete-button" onClick={() => handleDelete(file.id)}> Eliminar </button>
                 </td>
               </tr>
             ))}
