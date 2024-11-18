@@ -1,0 +1,73 @@
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  justify-content: center;
+  padding: 5px 20px; // Asegura que el padding se asemeje al del navbar
+}
+
+.drop-zone {
+  border: 2px dashed #4180ab;
+  border-radius: 5px;
+  padding: 20px; // Ajusta según sea necesario
+  text-align: center;
+  cursor: pointer;
+  margin: 20px 0; // Espacio entre la zona de carga y la tabla
+  box-shadow: 0 10px 8px #dceaf3;
+  background-color: #fafafa;
+}
+
+.file-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0; // Espacio entre la tabla y el resto del contenido
+}
+
+.file-table th, .file-table td {
+  padding: 10px; // Espaciado dentro de las celdas
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.file-table th {
+  background-color: #f2f2f2;
+}
+
+.file-table td img {
+  display: block;
+  margin: auto;
+}
+
+.file-table button {
+  padding: 5px 10px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.download-button {
+  background-color: green; // Fondo verde para el botón de descarga
+  color: white; // Texto blanco para mejor visibilidad
+  border: none; // Elimina el borde predeterminado
+  padding: 8px 12px; // Espaciado del botón
+  cursor: pointer;
+  border-radius: 4px; // Bordes redondeados
+}
+
+.download-button:hover {
+  background-color: darkgreen; // Color al pasar el cursor
+}
+
+.delete-button {
+  background-color: rgb(252, 8, 8); // Fondo verde para el botón de descarga
+  color: white; // Texto blanco para mejor visibilidad
+  border: none; // Elimina el borde predeterminado
+  padding: 8px 12px; // Espaciado del botón
+  cursor: pointer;
+  border-radius: 4px; // Bordes redondeados
+}
+
+.delete-button:hover {
+  background-color: rgb(177, 8, 8); // Color al pasar el cursor
+}
