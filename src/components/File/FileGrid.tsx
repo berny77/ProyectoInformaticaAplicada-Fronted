@@ -337,10 +337,11 @@ const File: React.FC = () => {
   };
 
 
-  const handleMine = () => {
-    const selectedCount = selectedFiles.size;
-
-    if (selectedCount < 4) {
+  const handleMine = async () => {
+    const selectedDocuments = files.filter(file => selectedFiles.has(file.id));
+    const selectedCount = selectedDocuments.length;
+  
+    if (selectedCount < 3) {
       Swal.fire({
         icon: 'warning',
         title: 'No hay suficientes documentos',
@@ -353,14 +354,43 @@ const File: React.FC = () => {
         text: 'No puedes seleccionar más de 5 documentos para minar.',
       });
     } else {
-      // Lógica para minar (pendiente de implementar)
-      Swal.fire({
-        icon: 'success',
-        title: 'Minado en proceso',
-        text: 'El proceso de minado ha comenzado.',
-      });
+      try {
+        const response = await fetch(`https://localhost:7001/api/Block/${sessionData.userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionData.token}`,
+          },
+          body: JSON.stringify(selectedDocuments),
+        });
+  
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Bloque minado con éxito',
+              text: 'El bloque fue creado y los documentos fueron procesados.',
+            });
+            await setUserFiles();
+            setSelectedFiles(new Set());
+          } else {
+            throw new Error(result.message);
+          }
+        } else {
+          throw new Error('Error en el servidor al intentar minar el bloque.');
+        }
+      } catch (error) {
+        console.error('Error durante el proceso de minado:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo completar el proceso de minado. Revisa la consola para más detalles.',
+        });
+      }
     }
   };
+  
 
   // Agregar esta función junto a las demás funciones de fetch existentes
   const bulkDelete = async (userId: number, documents: Document[], token: string) => {
