@@ -22,8 +22,8 @@ function Navbar1() {
                     </button>
                     <div className="navbar-collapse collapse" id="ftco-nav">
                         <ul className="navbar-nav ml-auto mr-md-3">
-                            <li className="nav-item active"><a href="#" className="nav-link">Inicio</a></li>
-                            <li className="nav-item"><a href="#" className="nav-link">Archivos Minados</a></li>
+                        <li className="nav-item"><a href="#" className="nav-link" onClick={() => navigate('/inicio')}>Inicio</a></li>
+                            <li className="nav-item"><a href="#" className="nav-link" onClick={() => navigate('/archivos-minados')}>Archivos Minados</a></li>
                             <li className="nav-item"><a href="#" className="nav-link">Configuracion</a></li>
                         </ul>
                     </div>
