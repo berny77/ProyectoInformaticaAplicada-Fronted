@@ -10,12 +10,12 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const loginData = {
-      email: username,
+      userN: username,
       password: password
     };
-
+  
     try {
       const response = await fetch('https://localhost:7001/api/User/login', {
         method: 'POST',
@@ -24,14 +24,15 @@ const Login: React.FC = () => {
         },
         body: JSON.stringify(loginData)
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         const sessionData = {
           userId: data.user.id, 
           userName: data.user.name, 
           lastName: data.user.lastName, 
-          token: data.token};
+          token: data.token
+        };
         sessionStorage.setItem('sessionData', JSON.stringify(sessionData));
         navigate('/inicio'); 
       } else {
@@ -41,6 +42,7 @@ const Login: React.FC = () => {
       alert('Hubo un error al intentar iniciar sesión');
     }
   };
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -57,7 +59,7 @@ const Login: React.FC = () => {
             <div className="mb-3">
               <label htmlFor="username" className="form-label">Correo Electrónico</label>
               <input
-                type="email"
+                type="text"
                 className="form-control"
                 id="username"
                 value={username}

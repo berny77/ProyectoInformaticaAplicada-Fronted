@@ -1,0 +1,27 @@
+.block-container {
+    margin: 20px;
+  }
+  
+  .block-table, .document-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .block-table th, .document-table th, .block-table td, .document-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .details-button, .close-button {
+    background-color: #4180ab;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .details-button:hover, .close-button:hover {
+    background-color: #315d7b;
+  }
+  

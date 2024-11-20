@@ -3,16 +3,16 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 15px;
   justify-content: center;
-  padding: 5px 20px; // Asegura que el padding se asemeje al del navbar
+  padding: 5px 20px; 
 }
 
 .drop-zone {
   border: 2px dashed #4180ab;
   border-radius: 5px;
-  padding: 20px; // Ajusta según sea necesario
+  padding: 20px; 
   text-align: center;
   cursor: pointer;
-  margin: 20px 0; // Espacio entre la zona de carga y la tabla
+  margin: 20px 0; 
   box-shadow: 0 10px 8px #dceaf3;
   background-color: #fafafa;
 }
@@ -20,11 +20,11 @@
 .file-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0; // Espacio entre la tabla y el resto del contenido
+  margin: 20px 0; 
 }
 
 .file-table th, .file-table td {
-  padding: 10px; // Espaciado dentro de las celdas
+  padding: 10px;
   text-align: left;
   border: 1px solid #ddd;
 }
@@ -47,27 +47,40 @@
 }
 
 .download-button {
-  background-color: green; // Fondo verde para el botón de descarga
-  color: white; // Texto blanco para mejor visibilidad
-  border: none; // Elimina el borde predeterminado
-  padding: 8px 12px; // Espaciado del botón
+  background-color: green;
+  color: white; 
+  border: none;
+  padding: 8px 12px;
   cursor: pointer;
-  border-radius: 4px; // Bordes redondeados
+  border-radius: 4px; 
 }
 
 .download-button:hover {
-  background-color: darkgreen; // Color al pasar el cursor
+  background-color: darkgreen;
 }
 
 .delete-button {
-  background-color: rgb(252, 8, 8); // Fondo verde para el botón de descarga
-  color: white; // Texto blanco para mejor visibilidad
-  border: none; // Elimina el borde predeterminado
-  padding: 8px 12px; // Espaciado del botón
+  background-color: rgb(252, 8, 8);
+  color: white;
+  border: none;
+  padding: 8px 12px;
   cursor: pointer;
-  border-radius: 4px; // Bordes redondeados
+  border-radius: 4px;
 }
 
 .delete-button:hover {
-  background-color: rgb(177, 8, 8); // Color al pasar el cursor
+  background-color: rgb(177, 8, 8);
+}
+
+.minar-button {
+  background-color: rgb(5, 217, 233); 
+  color: white; 
+  border: none; 
+  padding: 8px 12px; 
+  cursor: pointer;
+  border-radius: 4px; 
+}
+
+.minar-button:hover {
+  background-color: rgb(0, 95, 100);
 }
