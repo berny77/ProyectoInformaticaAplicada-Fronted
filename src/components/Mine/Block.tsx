@@ -1,23 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { Document } from '../../model/Document'; // Tu modelo existente
-import '../../styles/BlockGrid.scss'; // Archivo CSS para estilos
-
-// Definir el modelo de Block para la vista
-interface Block {
-  id: number;
-  miningDate: string;
-  attempts: number;
-  milliseconds: number;
-  hash: string;
-  previous_Hash: string;
-  documents: Document[];
-}
+import { Blockc } from '../../model/Document';
+import '../../styles/BlockGrid.scss';
 
 const Block: React.FC = () => {
-  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [blocks, setBlocks] = useState<Blockc[]>([]);
   const [sessionData, setSessionData] = useState(JSON.parse(sessionStorage.getItem('sessionData')!));
-  const [selectedBlock, setSelectedBlock] = useState<Block | null>(null);
+  const [selectedBlock, setSelectedBlock] = useState<Blockc | null>(null);
 
   const fetchBlocks = async () => {
     try {
@@ -48,22 +37,47 @@ const Block: React.FC = () => {
     fetchBlocks();
   }, []);
 
-  const handleBlockClick = (block: Block) => {
+  const handleBlockClick = (block: Blockc) => {
     setSelectedBlock(block);
   };
 
+  const getFileTypeDisplayName = (fileType: string): string => {
+    if (!fileType) {
+      return 'Desconocido';
+    }
+  
+    switch (fileType.toLowerCase()) { 
+      case 'pdf':
+        return 'PDF';
+      case 'text/plain':
+        return 'TXT';
+      case 'vnd.openxmlformats-officedocument.wordprocessingml.document':
+        return 'Word';
+      case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        return 'Excel';
+      case 'vnd.ms-excel':
+        return 'Excel (antiguo)';
+      case 'image/jpeg':
+        return 'JPEG';
+      case 'image/png':
+        return 'PNG';
+      default:
+        return `Desconocido (${fileType})`;
+    }
+  };
+
   return (
-    <div className="block-container">
-      <h2>Bloques Minados</h2>
+    <div className="block-grid-container">
+      <h2 className="title">Bloques Minados</h2>
       {blocks.length > 0 ? (
         <table className="block-table">
           <thead>
             <tr>
-              <th>Fecha de Minado</th>
+              <th>Fecha</th>
               <th>Prueba</th>
               <th>Milisegundos</th>
-              <th>Hash</th>
               <th>Hash Previo</th>
+              <th>Hash</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -73,8 +87,8 @@ const Block: React.FC = () => {
                 <td>{new Date(block.miningDate).toLocaleString()}</td>
                 <td>{block.attempts}</td>
                 <td>{block.milliseconds}</td>
-                <td>{block.hash}</td>
-                <td>{block.previous_Hash}</td>
+                <td className="hash-column">{block.previous_Hash}</td>
+                <td className="hash-column">{block.hash}</td>
                 <td>
                   <button
                     className="details-button"
@@ -88,19 +102,18 @@ const Block: React.FC = () => {
           </tbody>
         </table>
       ) : (
-        <p>No se encontraron bloques minados.</p>
+        <p className="no-data">No se encontraron bloques minados.</p>
       )}
 
       {selectedBlock && (
         <div className="block-details">
-          <h3>Documentos del Bloque</h3>
+          <h3 className="details-title">Documentos del Bloque</h3>
           <table className="document-table">
             <thead>
               <tr>
                 <th>Propietario</th>
-                <th>Nombre de Archivo</th>
-                <th>Tipo de Archivo</th>
-                <th>Fecha de Creación</th>
+                <th>Tipo</th>
+                <th>Creación</th>
                 <th>Tamaño</th>
               </tr>
             </thead>
@@ -108,10 +121,9 @@ const Block: React.FC = () => {
               {selectedBlock.documents.map((doc) => (
                 <tr key={doc.id}>
                   <td>{doc.owner}</td>
-                  <td>{doc.fileName || doc.name || 'N/A'}</td>
-                  <td>{doc.fileType}</td>
+                  <td>{getFileTypeDisplayName(doc.fileType)}</td>
                   <td>{new Date(doc.creationDate).toLocaleString()}</td>
-                  <td>{doc.size}</td>
+                  <td>{doc.size} bytes</td>
                 </tr>
               ))}
             </tbody>

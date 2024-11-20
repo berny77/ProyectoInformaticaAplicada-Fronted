@@ -5,6 +5,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import FileGrid from './components/File/FileGrid';
 import Block from './components/Mine/Block'; 
+import Configuration from './components/Configuration/Configuration';
+import Activity from './components/Activity/SystemActivity';
 
 const App: React.FC = () => {
   return (
@@ -14,7 +16,9 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/inicio" element={<FileGrid />} />
-        <Route path="/archivos-minados" element={<Block />} /> {/* Nueva ruta */}
+        <Route path="/archivos-minados" element={<Block />} /> 
+        <Route path="/configuration" element={<Configuration />} /> 
+        <Route path="/activity" element={<Activity />} />
       </Routes>
     </Router>
   );

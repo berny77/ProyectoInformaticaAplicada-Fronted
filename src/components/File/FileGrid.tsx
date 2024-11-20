@@ -4,10 +4,11 @@ import { Document } from '../../model/Document';
 import { getFileType } from './fileGridFns';
 import { getFileLogo } from './FileLogo';
 import '../../styles/FileGrid.scss';
-
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import Swal from 'sweetalert2';
+
+
 
 
 
@@ -82,6 +83,8 @@ const File: React.FC = () => {
   const [files, setFiles] = useState<Array<Document>>([]);
   const [selectedFiles, setSelectedFiles] = useState<Set<number>>(new Set());
   const fileLimit = 20;
+  const [configValue, setConfigValue] = useState<string | null>(null);
+
 
   const setUserFiles = async () => {
     if (sessionData) {
@@ -96,6 +99,57 @@ const File: React.FC = () => {
   useEffect(() => {
     setUserFiles();
   }, []);
+
+
+
+  const getConfigurationValue = async () => {
+    try {
+      const token = sessionData?.token;
+      if (!token) {
+        console.error("Token de autorización no encontrado");
+        return;
+      }
+
+      const response = await fetch('https://localhost:7001/api/Configuration', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        if (data && data.data && data.data.value !== undefined) {
+          return String(data.data.value);
+        } else {
+          console.error("Valor de configuración no encontrado en la respuesta.");
+          return null;
+        }
+      } else {
+        const errorDetail = await response.text();
+        console.error('Error al obtener la configuración:', response.status);
+        console.error('Detalles del error:', errorDetail);
+      }
+    } catch (error) {
+      console.error('Error en la solicitud de configuración:', error);
+    }
+  };
+
+
+
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      const value = await getConfigurationValue();
+      console.log('Valor de configuración recibido:', value);
+      setConfigValue(value || '');
+    };
+
+    fetchConfig();
+  }, []);
+
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles: Array<Document> = [];
@@ -149,7 +203,8 @@ const File: React.FC = () => {
   });
 
   const handleSelectFile = (fileId: number | undefined) => {
-    if (fileId === undefined) return;
+    if (fileId === undefined) return; 
+  
     setSelectedFiles(prevSelected => {
       const newSelected = new Set(prevSelected);
       if (newSelected.has(fileId)) newSelected.delete(fileId);
@@ -157,14 +212,15 @@ const File: React.FC = () => {
       return newSelected;
     });
   };
+  
 
 
   const handleDownloadSelected = async () => {
     const zip = new JSZip();
-  
+
     // Convierte selectedFiles (Set<number>) en un array antes de iterar
     const selectedFilesArray = Array.from(selectedFiles);
-  
+
     for (const fileId of selectedFilesArray) {
       const response = await fetch(`https://localhost:7001/api/MemPoolDocument/${sessionData.userId}/document/${fileId}`, {
         method: 'GET',
@@ -172,17 +228,17 @@ const File: React.FC = () => {
           Authorization: `Bearer ${sessionData.token}`,
         },
       });
-  
+
       const fileData = await response.json();
-  
+
       if (response.ok && fileData.success) {
         const content = fileData.data.doc_encode;
-  
+
         // Verifica si los datos Base64 no están vacíos
         if (content) {
           try {
             const byteArray = Uint8Array.from(atob(content), c => c.charCodeAt(0));
-  
+
             // Determina la extensión del archivo según su tipo MIME
             let fileExtension = '';
             switch (fileData.data.fileType) {
@@ -212,7 +268,7 @@ const File: React.FC = () => {
                 fileExtension = 'bin'; // Usar una extensión genérica si no se conoce
                 break;
             }
-  
+
             // Asigna el archivo decodificado al ZIP
             zip.file(`${fileData.data.owner}_${fileData.data.id}.${fileExtension}`, byteArray);
           } catch (error) {
@@ -223,18 +279,18 @@ const File: React.FC = () => {
         console.error('Error al obtener datos del archivo:', fileData.message);
       }
     }
-  
+
     // Generar el ZIP y permitir la descarga
     zip.generateAsync({ type: 'blob' }).then(content => {
       saveAs(content, 'archivos_comprimidos.zip');
     });
   };
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
 
 
 
@@ -248,12 +304,12 @@ const File: React.FC = () => {
           Authorization: `Bearer ${sessionData.token}`,
         },
       });
-  
+
       if (response.ok) {
         const fileData = await response.json();
         if (fileData.success && fileData.data && fileData.data.doc_encode) {
           const encodedContent = fileData.data.doc_encode;
-          
+
           // Verifica que la cadena Base64 esté completa
           if (encodedContent.length % 4 === 0) {
             // Decodifica el Base64 y convierte a Blob
@@ -262,7 +318,7 @@ const File: React.FC = () => {
             for (let i = 0; i < content.length; i++) {
               byteArray[i] = content.charCodeAt(i);
             }
-  
+
             const fileType = getFileType(fileData.data.fileType);
             let fileExtension = '';
             switch (fileType) {
@@ -291,7 +347,7 @@ const File: React.FC = () => {
                 fileExtension = 'file';
                 break;
             }
-  
+
             const blob = new Blob([byteArray], { type: fileData.data.fileType });
             saveAs(blob, `${fileData.data.fileName || `archivo_${fileData.data.id}`}.${fileExtension}`);
           } else {
@@ -307,9 +363,9 @@ const File: React.FC = () => {
       console.error('Error descargando archivo:', error);
     }
   };
-  
-  
-  
+
+
+
 
 
 
@@ -340,30 +396,36 @@ const File: React.FC = () => {
   const handleMine = async () => {
     const selectedDocuments = files.filter(file => selectedFiles.has(file.id));
     const selectedCount = selectedDocuments.length;
-  
-    if (selectedCount < 3) {
+
+    const configValue = await getConfigurationValue(); // Asegúrate de que esta función esté implementada correctamente
+    if (!configValue) {
+      console.error('No se pudo obtener el valor de configuración.');
+      return;
+    }
+    if (selectedCount < 2) {
       Swal.fire({
         icon: 'warning',
         title: 'No hay suficientes documentos',
-        text: 'Debes seleccionar al menos 3 documentos para minar.',
+        text: 'Debes seleccionar al menos 2 documentos para minar.',
       });
-    } else if (selectedCount > 5) {
+    } else if (selectedCount > parseInt(configValue)) {
       Swal.fire({
         icon: 'warning',
         title: 'Demasiados documentos seleccionados',
-        text: 'No puedes seleccionar más de 5 documentos para minar.',
+        text: 'No puedes seleccionar más documentos para minar.',
       });
     } else {
       try {
-        const response = await fetch(`https://localhost:7001/api/Block/${sessionData.userId}`, {
+        const { userId, token } = sessionData;
+        const response = await fetch(`https://localhost:7001/api/Block/${userId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionData.token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(selectedDocuments),
         });
-  
+
         if (response.ok) {
           const result = await response.json();
           if (result.success) {
@@ -390,9 +452,8 @@ const File: React.FC = () => {
       }
     }
   };
-  
 
-  // Agregar esta función junto a las demás funciones de fetch existentes
+  // Función de eliminación masiva
   const bulkDelete = async (userId: number, documents: Document[], token: string) => {
     try {
       const response = await fetch('https://localhost:7001/api/MemPoolDocument/bulkdelete', {
@@ -401,7 +462,7 @@ const File: React.FC = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(documents)
+        body: JSON.stringify(documents),
       });
 
       if (!response.ok) {
@@ -415,7 +476,7 @@ const File: React.FC = () => {
     }
   };
 
-  // Reemplazar la función handleDeleteSelected existente con esta versión
+  // Función para eliminar los documentos seleccionados
   const handleDeleteSelected = async () => {
     if (sessionData) {
       Swal.fire({
@@ -428,13 +489,8 @@ const File: React.FC = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            // Filtrar los documentos seleccionados
             const documentsToDelete = files.filter(file => selectedFiles.has(file.id));
-
-            // Llamar al endpoint de bulk delete
             await bulkDelete(sessionData.userId, documentsToDelete, sessionData.token);
-
-            // Actualizar el estado local
             setFiles(files.filter(file => !selectedFiles.has(file.id)));
             setSelectedFiles(new Set());
 
@@ -448,9 +504,6 @@ const File: React.FC = () => {
     }
   };
 
-
-
-
   return (
     <div style={{ margin: '0 20px' }}>
       <div
@@ -459,6 +512,9 @@ const File: React.FC = () => {
         style={{
           backgroundColor: isDragActive ? '#f0f8ff' : '#fafafa',
           marginBottom: '20px',
+          padding: '20px', // Agregar algo de espacio para mejorar la interfaz
+          border: '2px dashed #ccc', // Agregar borde para destacar la zona de drop
+          borderRadius: '8px', // Hacer los bordes redondeados
         }}
       >
         <input {...getInputProps()} />
@@ -475,20 +531,40 @@ const File: React.FC = () => {
           </p>
         )}
       </div>
-
-
+  
       {files.length > 0 && (
-        <table className="file-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table
+          className="file-table"
+          style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}
+        >
           <thead>
             <tr>
               <th colSpan={9} style={{ textAlign: 'right' }}>
-                {selectedFiles.size > 1 && (
-                  <>
-                    <button className="minar-button" onClick={handleMine}>Minar</button>
-                    <button className="download-button" onClick={handleDownloadSelected}>Descargar todo</button>
-                    <button className="delete-button" onClick={handleDeleteSelected} disabled={selectedFiles.size < 1}>Eliminar Todo</button>
-                  </>
-                )}
+                <div className="file-grid-actions">
+                  <button
+                    className="btn btn-primary"
+                    disabled={selectedFiles.size < 2}
+                    onClick={handleDownloadSelected}
+                  >
+                    Descargar Todo
+                  </button>
+  
+                  <button
+                    className="btn btn-danger"
+                    disabled={selectedFiles.size < 2}
+                    onClick={handleDeleteSelected}
+                  >
+                    Eliminar Todo
+                  </button>
+  
+                  <button
+                    className="btn btn-success"
+                    disabled={selectedFiles.size < 1}
+                    onClick={handleMine}
+                  >
+                    Minar
+                  </button>
+                </div>
               </th>
             </tr>
             <tr>
@@ -518,10 +594,20 @@ const File: React.FC = () => {
                 <td>{new Date(file.creationDate).toLocaleString()}</td>
                 <td>{formatFileSize(Number(file.size))}</td>
                 <td>
-                  <button className="download-button" onClick={() => handleDownload(file.id)}> Descargar </button>
+                  <button
+                    className="download-button"
+                    onClick={() => handleDownload(file.id)}
+                  >
+                    Descargar
+                  </button>
                 </td>
                 <td>
-                  <button className="delete-button" onClick={() => handleDelete(file.id)}> Eliminar </button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(file.id)}
+                  >
+                    Eliminar
+                  </button>
                 </td>
               </tr>
             ))}
@@ -530,6 +616,7 @@ const File: React.FC = () => {
       )}
     </div>
   );
+  
 };
 
 export default File;

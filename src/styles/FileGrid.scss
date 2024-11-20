@@ -47,7 +47,7 @@
 }
 
 .download-button {
-  background-color: green;
+  background-color: #007BFF;
   color: white; 
   border: none;
   padding: 8px 12px;
@@ -56,11 +56,11 @@
 }
 
 .download-button:hover {
-  background-color: darkgreen;
+  background-color: #0056B3;
 }
 
 .delete-button {
-  background-color: rgb(252, 8, 8);
+  background-color: #DC3545;
   color: white;
   border: none;
   padding: 8px 12px;
@@ -69,7 +69,7 @@
 }
 
 .delete-button:hover {
-  background-color: rgb(177, 8, 8);
+  background-color: #C82333;
 }
 
 .minar-button {
@@ -81,6 +81,14 @@
   border-radius: 4px; 
 }
 
+.minar-button {
+  background-color: black;
+  color: white; /* Para que el texto sea visible /
+  border: none; / Elimina cualquier borde por defecto /
+  padding: 10px 20px; / Ajusta el tamaño del botón /
+  cursor: pointer; / Cambia el cursor cuando se pasa sobre el botón /
+}
+
 .minar-button:hover {
-  background-color: rgb(0, 95, 100);
+  background-color: #333; / Un color más oscuro cuando se hace hover */
 }

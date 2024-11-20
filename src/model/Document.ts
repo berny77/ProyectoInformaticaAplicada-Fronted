@@ -8,4 +8,14 @@ export interface Document {
     doc_encode: string;
     name?: string;
   }
+
+  export interface Blockc {
+    id: number;
+    miningDate: string;
+    attempts: number;
+    milliseconds: number;
+    hash: string;
+    previous_Hash: string;
+    documents: Document[];
+  }
   
